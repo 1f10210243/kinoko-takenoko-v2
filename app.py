@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from flask.helpers import make_response
 app = Flask(__name__)
 
 kinoko_count = 3
@@ -17,6 +18,10 @@ def answer():
     elif request.form.get("item") == 'takenoko':
         takenoko_count += 1
     
+    messages.append(request.form.get("message"))
+    if len(messages)>3:
+        messages=messages[-3:]
+        
     kinoko_percent = kinoko_count / (kinoko_count + takenoko_count) * 100
     takenoko_percent = takenoko_count / (kinoko_count + takenoko_count) * 100
     return render_template('vote.html', **vars())
